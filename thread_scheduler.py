@@ -56,7 +56,7 @@ class Thread:
                 "sent": dateutil.parser.parse(tweet["sent"])
                 if tweet.get("sent")
                 else None,
-                "offset": tweet.get("offset"),
+                "offset": tweet.get("offset", 0),
                 "twitter_id": tweet.get("twitter_id"),
             }
             for tweet in config["tweets"]
@@ -93,9 +93,7 @@ class Thread:
                 continue
             return (
                 tweet,
-                last_sent + dt.timedelta(seconds=tweet["offset"])
-                if last_sent
-                else None,
+                (last_sent or self.start) + dt.timedelta(seconds=tweet["offset"]),
                 last_id,
             )
 
@@ -114,9 +112,9 @@ def main():
         tweet, timestamp, twitter_id = thread.get_to_be_sent()
         now = dt.datetime.now()
         if timestamp and timestamp > now:
-            sleep_duration = (timestamp - now).total_seconds()
+            sleep_duration = int((timestamp - now).total_seconds())
             sleep_minutes = int(sleep_duration / 60)
-            sleep_seconds = sleep_duration % 60
+            sleep_seconds = int(sleep_duration % 60)
             if check:
                 print(
                     f"Would sleep for {sleep_minutes} minutes, {sleep_seconds} seconds, then post:"
