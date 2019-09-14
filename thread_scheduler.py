@@ -26,6 +26,7 @@ ACCESS_TOKEN_KEY and ACCESS_TOKEN_SECRET.
 import datetime as dt
 import json
 import sys
+import textwrap
 import time
 
 import dateutil.parser
@@ -98,6 +99,21 @@ class Thread:
             )
 
 
+def print_tweet(text):
+    print_lines = []
+    lines = text.split('\n')
+    text_width = 50
+    buffer_width = text_width + 2
+    for line in lines:
+        print_lines += textwrap.wrap(line, text_width)
+    print('┏' + '━' * buffer_width + '┓')
+    print('┃' + ' ' * buffer_width + '┃')
+    for line in print_lines:
+        print('┃ ' + line.ljust(text_width) + ' ┃')
+    print('┃' + ' ' * buffer_width + '┃')
+    print('┗' + '━' * buffer_width + '┛')
+
+
 def main():
     path = sys.argv[1]
     thread = Thread(path)
@@ -119,20 +135,20 @@ def main():
                 print(
                     f"Would sleep for {sleep_minutes} minutes, {sleep_seconds} seconds, then post:"
                 )
-                print(tweet["text"])
+                print_tweet(tweet["text"])
                 return
             print(f"Will sleep for {sleep_minutes} minutes, {sleep_seconds} seconds.")
             time.sleep(sleep_duration)
         if check:
             print("Would post this tweet:")
-            print(tweet["text"])
+            print_tweet(tweet["text"])
             return
         result = api.update_status(tweet["text"], in_reply_to_status_id=twitter_id)
         tweet["twitter_id"] = result.id
         tweet["sent"] = now
         thread.save()
         print("Sent out a tweet:")
-        print(tweet["text"])
+        print_tweet(tweet["text"])
         if one_off:
             return
     print("All tweets have been sent!")
