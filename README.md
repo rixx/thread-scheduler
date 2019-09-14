@@ -41,7 +41,7 @@ You'll need one JSON file per thread. A file looks like this:
 }
 ```
 
-The file will later be edited by Thread Scheduler – **please keep a backup copy**.
+The file will later be edited by Thread Scheduler to add sent timestamps and tweet IDs.
 
 ## Usage
 

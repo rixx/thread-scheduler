@@ -77,12 +77,12 @@ class Thread:
 
     def save(self):
         with open(self.path, "w") as fp:
-            json.dump(
+            text = json.dumps(  # We use dumps instead of dump to prevent file corruption
                 {"start": self.start, "tweets": self.tweets},
-                fp,
                 default=json_datetime,
                 indent=4,
             )
+            fp.write(text)
 
     def get_to_be_sent(self):
         last_sent = None
@@ -101,17 +101,17 @@ class Thread:
 
 def print_tweet(text):
     print_lines = []
-    lines = text.split('\n')
+    lines = text.split("\n")
     text_width = 50
     buffer_width = text_width + 2
     for line in lines:
         print_lines += textwrap.wrap(line, text_width)
-    print('┏' + '━' * buffer_width + '┓')
-    print('┃' + ' ' * buffer_width + '┃')
+    print("┏" + "━" * buffer_width + "┓")
+    print("┃" + " " * buffer_width + "┃")
     for line in print_lines:
-        print('┃ ' + line.ljust(text_width) + ' ┃')
-    print('┃' + ' ' * buffer_width + '┃')
-    print('┗' + '━' * buffer_width + '┛')
+        print("┃ " + line.ljust(text_width) + " ┃")
+    print("┃" + " " * buffer_width + "┃")
+    print("┗" + "━" * buffer_width + "┛")
 
 
 def main():
