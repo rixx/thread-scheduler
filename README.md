@@ -57,6 +57,14 @@ Maybe post a single tweet first (useful if you want to run this via crontab):
 python thread_scheduler.py tweets.json --one-off
 ```
 
+
+If you choose to run your script via one-offs, you probably want to add the ``--no-sleep`` flag, too, to prevent the
+script from hanging until the next tweet is due:
+
+```
+python thread_scheduler.py tweets.json --one-off --no-sleep
+```
+
 Or just leave the script running until the thread has been posted. Will provide print output, and save progress in the
 JSON file, so that you can safely abort at any time:
 

@@ -119,6 +119,7 @@ def main():
     thread = Thread(path)
     check = "--check" in sys.argv
     one_off = "--one-off" in sys.argv
+    no_sleep = "--no-sleep" in sys.argv
     if not check:
         auth = tweepy.OAuthHandler(API_KEY, API_SECRET)
         auth.set_access_token(ACCESS_TOKEN_KEY, ACCESS_TOKEN_SECRET)
@@ -131,7 +132,7 @@ def main():
             sleep_duration = int((timestamp - now).total_seconds())
             sleep_minutes = int(sleep_duration / 60)
             sleep_seconds = int(sleep_duration % 60)
-            if check:
+            if check or no_sleep:
                 print(
                     f"Would sleep for {sleep_minutes} minutes, {sleep_seconds} seconds, then post:"
                 )
