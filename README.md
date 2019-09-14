@@ -80,6 +80,42 @@ JSON file, so that you can safely abort at any time:
 python thread_scheduler.py tweets.json
 ```
 
+If everything goes well, you should see helpful output like this:
+
+```
+python thread_scheduler.py tweets.json
+Will sleep for 284 minutes, 37 seconds.
+Sent out a tweet:
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃                                                    ┃
+┃ While I should have slept, I wrote a little Python ┃
+┃ script: thread-scheduler.                          ┃
+┃ https://github.com/rixx/thread-scheduler           ┃
+┃                                                    ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+Sent out a tweet:
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃                                                    ┃
+┃ As its creative name suggests, it … schedules      ┃
+┃ threads.                                           ┃
+┃ You can write out a Twitter thread, tell it when   ┃
+┃ to start and how much time to leave between        ┃
+┃ tweets, and it will happily post away.             ┃
+┃                                                    ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+Will sleep for 0 minutes, 59 seconds.
+Sent out a tweet:
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃                                                    ┃
+┃ It's probably not useful for anybody except me,    ┃
+┃ but I'm putting it out there just in case. About a ┃
+┃ hundred lines of relevant code, and that's         ┃
+┃ including a bunch of flags.                        ┃
+┃                                                    ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+All tweets have been sent!
+```
+
 ## Detailed setup instructions
 
 1. Open a terminal and make sure you have ``python3`` available.
