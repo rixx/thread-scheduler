@@ -68,7 +68,7 @@ class Thread:
         for tweet in self.tweets:
             text = tweet["text"]
             if len(text) > 280:
-                raise Exception("Tweet cannot be longer than 280 characters: " + text)
+                raise Exception(f"This tweet is {len(text)} characters long. That's {len(text) - 280} too many: " + text)
             if text == last_tweet:
                 raise Exception(
                     "Twitter will probably prevent two same tweets in a row: " + text
