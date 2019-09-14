@@ -59,6 +59,14 @@ Check what would happen if you were to run Thread Scheduler first:
 python thread_scheduler.py tweets.json --check
 ```
 
+
+Or have your entire thread analyzed – this will print the post times and the length of each tweet, so that you know
+where you can fit in more content:
+
+```
+python thread_scheduler.py tweets.json --analyze
+```
+
 Maybe post a single tweet first (useful if you want to run this via crontab):
 
 ```

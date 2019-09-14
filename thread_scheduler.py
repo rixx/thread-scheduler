@@ -98,6 +98,14 @@ class Thread:
                 last_id,
             )
 
+    def analyze(self):
+        current_time = self.start
+        for tweet in self.tweets:
+            current_time += dt.timedelta(seconds=tweet.get("offset", 0))
+            print(f"{current_time.strftime('%Y-%m-%d %H:%M:%S')}: Sending tweet ({len(tweet['text'])}/280)")
+            print_tweet(tweet["text"])
+        print("Done!")
+
 
 def print_tweet(text):
     print_lines = []
@@ -120,6 +128,12 @@ def main():
     check = "--check" in sys.argv
     one_off = "--one-off" in sys.argv
     no_sleep = "--no-sleep" in sys.argv
+    analyze = "--analyze" in sys.argv
+
+    if analyze:
+        thread.analyze()
+        return
+
     if not check:
         auth = tweepy.OAuthHandler(API_KEY, API_SECRET)
         auth.set_access_token(ACCESS_TOKEN_KEY, ACCESS_TOKEN_SECRET)
