@@ -1,6 +1,12 @@
 # Thread Scheduler
 
 No creative names for you, I'm afraid. This is a script to post pre-configured threads on Twitter.
+You can schedule when to start the thread, and then a time offset for each tweet.
+It also performs basic checks for tweet length and duplicate tweets.
+
+You can run this script either once until the whole thread is posted, or repeatedly, e.g. via cronjobs.
+You'll provide a file with the tweets to be posted, which will then be updated by the script to reflect which tweet has
+already been posted.
 
 ## Setup
 
