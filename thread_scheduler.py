@@ -29,12 +29,13 @@ import json
 import sys
 import textwrap
 import time
+from pathlib import Path
 
 import dateutil.parser
 import tweepy
 
-from settings import API_KEY, API_SECRET, ACCESS_TOKEN_KEY, ACCESS_TOKEN_SECRET
-from pathlib import Path
+from settings import ACCESS_TOKEN_KEY, ACCESS_TOKEN_SECRET, API_KEY, API_SECRET
+
 
 def json_datetime(value):
     if isinstance(value, dt.datetime):
@@ -54,13 +55,15 @@ class Thread:
         self.start = dateutil.parser.parse(config["start"])
         self.tweets = [
             {
-                "text": tweet.get("text",""),
+                "text": tweet.get("text", ""),
                 "sent": dateutil.parser.parse(tweet["sent"])
                 if tweet.get("sent")
                 else None,
                 "offset": int(tweet.get("offset", 0)),
                 "twitter_id": tweet.get("twitter_id"),
-                "media": tweet["media"] if tweet.get("media") and Path(tweet["media"]).is_file() else None 
+                "media": tweet["media"]
+                if tweet.get("media") and Path(tweet["media"]).is_file()
+                else None,
             }
             for tweet in config["tweets"]
         ]
@@ -70,7 +73,10 @@ class Thread:
         for tweet in self.tweets:
             text = tweet["text"]
             if len(text) > 280:
-                raise Exception(f"This tweet is {len(text)} characters long. That's {len(text) - 280} too many: " + text)
+                raise Exception(
+                    f"This tweet is {len(text)} characters long. That's {len(text) - 280} too many: "
+                    + text
+                )
             if text == last_tweet:
                 raise Exception(
                     "Twitter will probably prevent two same tweets in a row: " + text
@@ -104,7 +110,9 @@ class Thread:
         current_time = self.start
         for tweet in self.tweets:
             current_time += dt.timedelta(seconds=tweet.get("offset", 0))
-            print(f"{current_time.strftime('%Y-%m-%d %H:%M:%S')}: Sending tweet ({len(tweet['text'])}/280)")
+            print(
+                f"{current_time.strftime('%Y-%m-%d %H:%M:%S')}: Sending tweet ({len(tweet['text'])}/280)"
+            )
             print_tweet(tweet["text"], tweet["media"])
         print("Done!")
 
@@ -164,7 +172,9 @@ def main():
             print_tweet(tweet["text"], tweet["media"])
             return
         if tweet["media"]:
-            result = api.update_with_media(tweet["media"], tweet["text"], in_reply_to_status_id=twitter_id)
+            result = api.update_with_media(
+                tweet["media"], tweet["text"], in_reply_to_status_id=twitter_id
+            )
         else:
             result = api.update_status(tweet["text"], in_reply_to_status_id=twitter_id)
         tweet["twitter_id"] = result.id
