@@ -105,7 +105,7 @@ class Thread:
         for tweet in self.tweets:
             current_time += dt.timedelta(seconds=tweet.get("offset", 0))
             print(f"{current_time.strftime('%Y-%m-%d %H:%M:%S')}: Sending tweet ({len(tweet['text'])}/280)")
-            print_tweet(tweet["text"], tweet.get("media", None))
+            print_tweet(tweet["text"], tweet["media"])
         print("Done!")
 
 
@@ -155,13 +155,13 @@ def main():
                 print(
                     f"Would sleep for {sleep_minutes} minutes, {sleep_seconds} seconds, then post:"
                 )
-                print_tweet(tweet["text"], tweet.get("media", None))
+                print_tweet(tweet["text"], tweet["media"])
                 return
             print(f"Will sleep for {sleep_minutes} minutes, {sleep_seconds} seconds.")
             time.sleep(sleep_duration)
         if check:
             print("Would post this tweet:")
-            print_tweet(tweet["text"], tweet.get("media", None))
+            print_tweet(tweet["text"], tweet["media"])
             return
         if tweet["media"]:
             result = api.update_with_media(tweet["media"], tweet["text"], in_reply_to_status_id=twitter_id)
