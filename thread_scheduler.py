@@ -11,6 +11,7 @@ The JSON file will be updated by this script. It looks like this:
         "tweets": [
             {
                 "text": "…",
+                "media": "path/to/pic/or/video"
             },
             {
                 "text": "…",
@@ -33,7 +34,7 @@ import dateutil.parser
 import tweepy
 
 from settings import API_KEY, API_SECRET, ACCESS_TOKEN_KEY, ACCESS_TOKEN_SECRET
-
+from pathlib import Path
 
 def json_datetime(value):
     if isinstance(value, dt.datetime):
@@ -53,12 +54,13 @@ class Thread:
         self.start = dateutil.parser.parse(config["start"])
         self.tweets = [
             {
-                "text": tweet["text"],
+                "text": tweet.get("text",""),
                 "sent": dateutil.parser.parse(tweet["sent"])
                 if tweet.get("sent")
                 else None,
-                "offset": tweet.get("offset", 0),
+                "offset": int(tweet.get("offset", 0)),
                 "twitter_id": tweet.get("twitter_id"),
+                "media": tweet["media"] if tweet.get("media") and Path(tweet["media"]).is_file() else None 
             }
             for tweet in config["tweets"]
         ]
@@ -103,12 +105,13 @@ class Thread:
         for tweet in self.tweets:
             current_time += dt.timedelta(seconds=tweet.get("offset", 0))
             print(f"{current_time.strftime('%Y-%m-%d %H:%M:%S')}: Sending tweet ({len(tweet['text'])}/280)")
-            print_tweet(tweet["text"])
+            print_tweet(tweet["text"], tweet["media"])
         print("Done!")
 
 
-def print_tweet(text):
+def print_tweet(text, media):
     print_lines = []
+    media_text = "* with media link"
     lines = text.split("\n")
     text_width = 50
     buffer_width = text_width + 2
@@ -118,6 +121,8 @@ def print_tweet(text):
     print("┃" + " " * buffer_width + "┃")
     for line in print_lines:
         print("┃ " + line.ljust(text_width) + " ┃")
+    if media:
+        print("┃ " + media_text.ljust(text_width) + " ┃")
     print("┃" + " " * buffer_width + "┃")
     print("┗" + "━" * buffer_width + "┛")
 
@@ -150,20 +155,23 @@ def main():
                 print(
                     f"Would sleep for {sleep_minutes} minutes, {sleep_seconds} seconds, then post:"
                 )
-                print_tweet(tweet["text"])
+                print_tweet(tweet["text"], tweet["media"])
                 return
             print(f"Will sleep for {sleep_minutes} minutes, {sleep_seconds} seconds.")
             time.sleep(sleep_duration)
         if check:
             print("Would post this tweet:")
-            print_tweet(tweet["text"])
+            print_tweet(tweet["text"], tweet["media"])
             return
-        result = api.update_status(tweet["text"], in_reply_to_status_id=twitter_id)
+        if tweet["media"]:
+            result = api.update_with_media(tweet["media"], tweet["text"], in_reply_to_status_id=twitter_id)
+        else:
+            result = api.update_status(tweet["text"], in_reply_to_status_id=twitter_id)
         tweet["twitter_id"] = result.id
         tweet["sent"] = now
         thread.save()
         print("Sent out a tweet:")
-        print_tweet(tweet["text"])
+        print_tweet(result.text, None)
         if one_off:
             return
     print("All tweets have been sent!")

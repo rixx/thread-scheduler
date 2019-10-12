@@ -2,7 +2,7 @@
 
 No creative names for you, I'm afraid. This is a script to post pre-configured threads on Twitter.
 You can schedule when to start the thread, and then a time offset for each tweet.
-It also performs basic checks for tweet length and duplicate tweets.
+It also performs basic checks for tweet length and duplicate tweets. And you can include media to be uploaded with your tweet.
 
 You can run this script either once until the whole thread has been posted, or repeatedly, e.g. via cronjobs.
 You'll provide a file with the tweets to be posted, which will then be updated by the script to reflect which tweet has
@@ -21,8 +21,8 @@ Put a file called ``settings.py`` in this directory:
 ```python
 API_KEY = "..."
 API_SECRET = "..."
-AUTH_TOKEN_KEY = "..."
-AUTH_TOKEN_SECRET = "..."
+ACCESS_TOKEN_KEY = "..."
+ACCESS_TOKEN_SECRET = "..."
 ```
 
 ## Tweets
@@ -43,7 +43,8 @@ current tweet, and is a value in **seconds**. A file looks like this:
     },
     {
       "text": "Tweet\nwith\nnewlines",
-      "offset": 3
+      "offset": 3,
+      "media": "path/to/pic/or/video"
     }
   ]
 }
