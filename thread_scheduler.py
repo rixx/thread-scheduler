@@ -61,9 +61,7 @@ class Thread:
                 else None,
                 "offset": int(tweet.get("offset", 0)),
                 "twitter_id": tweet.get("twitter_id"),
-                "media": tweet["media"]
-                if tweet.get("media") and Path(tweet["media"]).is_file()
-                else None,
+                "media": tweet.get("media"),
             }
             for tweet in config["tweets"]
         ]
@@ -72,6 +70,9 @@ class Thread:
         last_tweet = None
         for tweet in self.tweets:
             text = tweet["text"]
+            media = tweet["media"]
+            if media and not Path(media).is_file():
+                raise Exception(f"Media file at {media} does not exist.")
             if len(text) > 280:
                 raise Exception(
                     f"This tweet is {len(text)} characters long. That's {len(text) - 280} too many: "
