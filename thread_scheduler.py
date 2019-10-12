@@ -120,8 +120,10 @@ class Thread:
 
 def print_tweet(text, media):
     print_lines = []
-    media_text = "* with media link"
     lines = text.split("\n")
+    if media:
+        lines.append("")
+        lines.append(f"* with media file {media}")
     text_width = 50
     buffer_width = text_width + 2
     for line in lines:
@@ -130,8 +132,6 @@ def print_tweet(text, media):
     print("┃" + " " * buffer_width + "┃")
     for line in print_lines:
         print("┃ " + line.ljust(text_width) + " ┃")
-    if media:
-        print("┃ " + media_text.ljust(text_width) + " ┃")
     print("┃" + " " * buffer_width + "┃")
     print("┗" + "━" * buffer_width + "┛")
 
