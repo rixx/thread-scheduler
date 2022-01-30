@@ -86,10 +86,12 @@ class Thread:
 
     def save(self):
         with open(self.path, "w") as fp:
-            text = json.dumps(  # We use dumps instead of dump to prevent file corruption
-                {"start": self.start, "tweets": self.tweets},
-                default=json_datetime,
-                indent=4,
+            text = (
+                json.dumps(  # We use dumps instead of dump to prevent file corruption
+                    {"start": self.start, "tweets": self.tweets},
+                    default=json_datetime,
+                    indent=4,
+                )
             )
             fp.write(text)
 
